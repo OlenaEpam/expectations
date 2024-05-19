@@ -1,15 +1,13 @@
 import great_expectations as ge
 from great_expectations.profile.user_configurable_profiler import UserConfigurableProfiler
-from great_expectations.core.batch import BatchRequest
 from great_expectations.core.batch import RuntimeBatchRequest
-from great_expectations.checkpoint import SimpleCheckpoint
 from creating_datasource import datasource_config
 
 context = ge.get_context()
 context.add_datasource(**datasource_config)
 
 batch_request = RuntimeBatchRequest(
-    datasource_name="my_datasource_36",
+    datasource_name="my_datasource_38",
     data_connector_name="default_runtime_data_connector_name",
     data_asset_name="default_data_asset_name",
     runtime_parameters={
@@ -47,7 +45,7 @@ suite = profiler.build_suite()
 validator.save_expectation_suite()
 print(suite.expectations)
 checkpoint = context.add_or_update_checkpoint(
-    name="my_quickstart_checkpoint_Lena",
+    name="my_quickstart_checkpoint",
     validator=validator,
 )
 results = checkpoint.run()
