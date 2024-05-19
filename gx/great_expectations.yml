@@ -1,0 +1,481 @@
+# Welcome to Great Expectations! Always know what to expect from your data.
+#
+# Here you can define datasources, batch kwargs generators, integrations and
+# more. This file is intended to be committed to your repo. For help with
+# configuration please:
+#   - Read our docs: https://docs.greatexpectations.io/docs/guides/connecting_to_your_data/connect_to_data_overview/#2-configure-your-datasource
+#   - Join our slack channel: http://greatexpectations.io/slack
+
+# config_version refers to the syntactic version of this config file, and is used in maintaining backwards compatibility
+# It is auto-generated and usually does not need to be changed.
+config_version: 3.0
+
+# Datasources tell Great Expectations where your data lives and how to get it.
+# Read more at https://docs.greatexpectations.io/docs/guides/connecting_to_your_data/connect_to_data_overview
+#datasources:
+#  my_db:
+#    class_name: SqlalchemyDatasource
+#    credentials:
+#      url: mssql+pyodbc://SA:Strong.Pwd-123@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+#    data_asset_type:
+#      class_name: SqlAlchemyDataset
+#    batch_kwargs_generators:
+#      default:
+#        class_name: TableBatchKwargsGenerator
+#        table_name: employees
+#        schema: hr
+#datasources: this is the last one
+#  my_db:
+#    class_name: SimpleSqlalchemyDatasource
+#    module_name: great_expectations.datasource
+#    data_asset_type:
+#      class_name: SqlAlchemyDataset
+#    batch_kwargs_generators:
+#      default:
+#        class_name: TableBatchKwargsGenerator
+#        tables:
+#          employees:
+#            schema: hr
+
+#  my_datasource_6:
+#    class_name: SimpleSqlalchemyDatasource
+#    module_name: great_expectations.datasource
+#    credentials:
+#      url: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+#    my_mssql_TRN_source:
+#        data_asset_type:
+#            class_name: SqlAlchemyDataset
+#            module_name: great_expectations.dataset
+#        class_name: SqlAlchemyDatasource
+#        module_name: great_expectations.datasource
+#        credentials:
+#            drivername: mssql+pyodbc
+#            host: localhost
+#            port: 1433
+#            username: OlenaPavlyushchikk
+#            password: Oredko0808
+#            database: TRN
+#            query: {driver: 'ODBC Driver 18 for SQL Server'}
+
+# This config file supports variable substitution which enables: 1) keeping
+# secrets out of source control & 2) environment-based configuration changes
+# such as staging vs prod.
+#
+# When GX encounters substitution syntax (like `my_key: ${my_value}` or
+# `my_key: $my_value`) in the great_expectations.yml file, it will attempt
+# to replace the value of `my_key` with the value from an environment
+# variable `my_value` or a corresponding key read from this config file,
+# which is defined through the `config_variables_file_path`.
+# Environment variables take precedence over variables defined here.
+#
+# Substitution values defined here can be a simple (non-nested) value,
+# nested value such as a dictionary, or an environment variable (i.e. ${ENV_VAR})
+#
+#
+# https://docs.greatexpectations.io/docs/guides/setup/configuring_data_contexts/how_to_configure_credentials
+
+#    credentials: this is the last one
+#      drivername: mssql+pyodbc
+#      host: localhost
+#      port: 1433
+#      username: OlenaPavlyushchik
+#      password: Oredko0808
+#      database: TRN
+#      query: {driver: ODBC Driver 18 for SQL Server}
+#config_variables_file_path: uncommitted/config_variables.yml
+
+# The plugins_directory will be added to your python path for custom modules
+# used to override and extend Great Expectations.
+plugins_directory: plugins/
+
+stores:
+# Stores are configurable places to store things like Expectations, Validations
+# Data Docs, and more. These are for advanced users only - most users can simply
+# leave this section alone.
+#
+# Three stores are required: expectations, validations, and
+# evaluation_parameters, and must exist with a valid store entry. Additional
+# stores can be configured for uses such as data_docs, etc.
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: expectations/
+
+  validations_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/validations/
+
+  evaluation_parameter_store:
+    class_name: EvaluationParameterStore
+  checkpoint_store:
+    class_name: CheckpointStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      suppress_store_backend_id: true
+      base_directory: checkpoints/
+
+  profiler_store:
+    class_name: ProfilerStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      suppress_store_backend_id: true
+      base_directory: profilers/
+
+expectations_store_name: expectations_store
+validations_store_name: validations_store
+evaluation_parameter_store_name: evaluation_parameter_store
+checkpoint_store_name: checkpoint_store
+
+data_docs_sites:
+  # Data Docs make it simple to visualize data quality in your project. These
+  # include Expectations, Validations & Profiles. The are built for all
+  # Datasources from JSON artifacts in the local repo including validations &
+  # profiles from the uncommitted directory. Read more at https://docs.greatexpectations.io/docs/terms/data_docs
+  local_site:
+    class_name: SiteBuilder
+    show_how_to_buttons: true
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/data_docs/local_site/
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder
+
+anonymous_usage_statistics:
+  data_context_id: 69a385ff-61b2-43f8-965f-d227533a6ba8
+  enabled: true
+fluent_datasources:
+  my_datasource:
+    type: sql
+    assets:
+      my_query_asset:
+        type: query
+        order_by: []
+        batch_metadata: {}
+        query: SELECT * from hr.employees
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_2:
+    type: sql
+    assets:
+      my_query_asset_2:
+        type: query
+        order_by: []
+        batch_metadata: {}
+        query: SELECT * from hr.employees
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_3:
+    type: sql
+    assets:
+      my_query_asset_3:
+        type: query
+        order_by: []
+        batch_metadata: {}
+        query: SELECT * from hr.employees
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_4:
+    type: sql
+    assets:
+      my_asset_1:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_10:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_11:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_12:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_13:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_14:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_15:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_16:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_17:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_18:
+    type: sql
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_19:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_20:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_21:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_23:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_24:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_25:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_26:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+  my_datasource_27:
+    type: sql
+    assets:
+      asset_employees:
+        type: table
+        order_by: []
+        batch_metadata: {}
+        table_name: hr.employees
+        schema_name:
+    connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+datasources:
+  my_datasource_28:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_29:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_30:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_31:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_32:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_33:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_34:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_35:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        name: default_runtime_data_connector_name
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+  my_datasource_36:
+    class_name: Datasource
+    module_name: great_expectations.datasource
+    execution_engine:
+      class_name: SqlAlchemyExecutionEngine
+      module_name: great_expectations.execution_engine
+      connection_string: mssql+pyodbc://OlenaPavlyushchik:Oredko0808@127.0.0.1/TRN?driver=ODBC+Driver+18+for+SQL+Server&charset=utf&autocommit=true&TrustServerCertificate=yes
+    data_connectors:
+      default_runtime_data_connector_name:
+        class_name: RuntimeDataConnector
+        module_name: great_expectations.datasource.data_connector
+        batch_identifiers:
+          - default_identifier_name
+notebooks:
+config_variables_file_path:
+include_rendered_content:
+  globally: false
+  expectation_suite: false
+  expectation_validation_result: false

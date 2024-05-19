@@ -18,3 +18,6 @@ checkpoint = context.add_or_update_checkpoint(
 )
 checkpoint_result = checkpoint.run()
 context.view_validation_result(checkpoint_result)
+print(gx.__version__)
+
+
